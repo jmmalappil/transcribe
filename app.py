@@ -2,6 +2,7 @@ import streamlit as st
 import moviepy.editor as mp
 from pydub import AudioSegment
 from google.cloud import speech, texttospeech
+import json
 import io
 import os
 import requests
@@ -122,6 +123,19 @@ def replace_audio_in_video(video_file, new_audio_file, output_video_file):
 
 # Streamlit App
 st.title("Video to Text Transcription")
+
+# Load the credentials from the environment variable
+credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
+
+if credentials_json:
+    credentials_dict = json.loads(credentials_json)
+
+    # Write the credentials to a temporary file
+    with open("/tmp/google_credentials.json", "w") as cred_file:
+        cred_file.write(json.dumps(credentials_dict))
+
+    # Set the GOOGLE_APPLICATION_CREDENTIALS environment variable to point to the temporary file
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/tmp/google_credentials.json"
 
 # Azure API credentials
 azure_api_key = "22ec84421ec24230a3638d1b51e3a7dc"
