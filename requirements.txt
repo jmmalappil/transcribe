@@ -1,4 +1,5 @@
 moviepy
 pydub
 streamlit
-google.cloud
+google-cloud-speech
+google-cloud-texttospeech
