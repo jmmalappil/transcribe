@@ -3,3 +3,4 @@ pydub
 streamlit
 google-cloud-speech
 google-cloud-texttospeech
+openai==0.28
