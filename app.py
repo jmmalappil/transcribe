@@ -127,7 +127,7 @@ def replace_audio_in_video(video_file, new_audio_file, output_video_file):
                           temp_audiofile='temp-audio.m4a', remove_temp=True, threads=4, preset='ultrafast')
 
 # Streamlit App
-st.title("Video to Text Transcription")
+st.title("Video Audio Replacement PoC")
 
 # Load the credentials from the environment variable
 credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
