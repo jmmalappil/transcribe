@@ -49,7 +49,7 @@ def correct_transcription_azure(transcript, azure_endpoint, azure_api_key):
 
         data = {
             "messages": [
-                {"role": "user", "content": f"Correct the mistakes in the following transcript: {transcript}"}
+                {"role": "user", "content": f"Correct the following transcription by removing filler words like 'um', 'hmm', etc., and fixing grammatical mistakes: {transcript}"}
             ],
             "max_tokens": 500
         }
