@@ -41,26 +41,31 @@ def audio_to_text(audio_file):
     return transcript
 
 def correct_transcription_azure(transcript, azure_endpoint, azure_api_key):
-    # Prepare headers and request body
-    headers = {
-        "Content-Type": "application/json",
-        "Ocp-Apim-Subscription-Key": azure_api_key,
-    }
-    body = {
-        "text": transcript
-    }
+    try:
+        headers = {
+            "Content-Type": "application/json",
+            "api-key": azure_api_key
+        }
 
-    # Send request to Azure OpenAI API for correction
-    response = requests.post(azure_endpoint, headers=headers, json=body)
+        data = {
+            "messages": [
+                {"role": "user", "content": f"Correct the mistakes in the following transcript: {transcript}"}
+            ],
+            "max_tokens": 500
+        }
 
-    # Parse the response
-    if response.status_code == 200:
-        response_json = response.json()
-        return response_json.get("correctedText", transcript)
-    elif response.status_code == 401:
-        raise Exception("Azure API Error: 401 Unauthorized. Please check your API key and endpoint for correctness.")
-    else:
-        raise Exception(f"Azure API Error: {response.status_code}, {response.text}")
+        response = requests.post(azure_endpoint, headers=headers, json=data)
+
+        if response.status_code == 200:
+            result = response.json()
+            corrected_transcript = result["choices"][0]["message"]["content"].strip()
+            return corrected_transcript
+        else:
+            st.error(f"Failed to connect or retrieve response: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        st.error(f"Failed to connect or retrieve response: {str(e)}")
+        return None
 
 def text_to_speech_google(text, output_audio_file):
     client = texttospeech.TextToSpeechClient()
